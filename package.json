@@ -2,7 +2,7 @@
   "name": "challenge04-datatypes",
   "author": "Wellington S. Almeida (WellsSA)",
   "version": "1.0.0",
-  "description": "This is a code challenge where you are supposed to understand a bit more about the Javascript lifecycle and ECMAScript Modules implementing a functional customized Command Line Interface (CLI) with beautiful terminal outputs, understanding a bit more about internationalization on the process.",
+  "description": "This is the official repository of the 4th EW.IT code challenge. Which is a Producer/Consumer Application where you can manually view and recommend cryptos on the Producer side & plot charts and manage your recommendation wallet on the Consumer side.",
   "license": "MIT",
   "keywords": [],
   "main": "src/index.js",
