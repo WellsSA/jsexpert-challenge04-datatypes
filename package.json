@@ -15,7 +15,10 @@
     "provider": "npx json-server --watch src/provider-server.json --port 3001"
   },
   "dependencies": {
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
