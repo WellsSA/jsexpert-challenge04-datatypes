@@ -18,6 +18,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "yargs": "^17.3.1"
   },
   "devDependencies": {
