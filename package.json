@@ -8,8 +8,11 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-json-modules --experimental-top-level-await src",
-    "dev": "nodemon --exec npm start"
+    "producer": "node --experimental-json-modules --experimental-top-level-await src",
+    "producer:dev": "nodemon --exec npm run producer",
+    "consumer": "node --experimental-json-modules --experimental-top-level-await src/consumer-cli.js",
+    "consumer:dev": "nodemon --exec npm run consumer",
+    "provider": "npx json-server --watch src/provider-server.json --port 3001"
   },
   "dependencies": {
     "dotenv": "^16.0.0"
