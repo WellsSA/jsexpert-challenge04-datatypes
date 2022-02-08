@@ -8,6 +8,13 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-json-modules --experimental-top-level-await src"
+    "start": "node --experimental-json-modules --experimental-top-level-await src",
+    "dev": "nodemon --exec npm start"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
