@@ -34,7 +34,7 @@ class CustomTerminal {
   }
 
   hasDataToPrint() {
-    // TODO: Como saber se tem informação dentro da estrutura escolhida? (dica: size)
+    // TODO: Como saber se tem informação dentro da estrutura escolhida?
     return false;
   }
   /**
