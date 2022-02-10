@@ -8,63 +8,78 @@ Como vocês sabem, o `módulo 05 - Advanced Javascript Data Types` apresenta est
 
 Este desafio consiste em um sistema de recomendação manual de criptomoedas, juntamente com um sistema de carteiras de recomendações personalizadas para cada usuário, onde é possível analisar informações sobre as criptos recomendadas e manter elas na carteira ou não - ou seja, é uma típica _Producer/Consumer Application_, como você pode ver na imagem a seguir:
 
-# TODO: INSERIR FLOWCHART AQUI
+![image](https://user-images.githubusercontent.com/41883467/153203842-8889bbd8-e9e4-496c-b8ae-d9c6c6ec57e3.png)
 
 ## Entendendo o ecossistema
 
-- Provider
-- Producer
-- Consumer
+### Provider
+O Provider é o servidor que servirá como a API do sistema, e deverá ser executado antes de todos os outros serviços atráves do `npm run provider`. O comando mencionado sobe um servidor mock com `json-server`, trazendo dados na estrutura de uma uma API de criptomoedas real com informações atualizadas do dia 02/02/2021.
 
-# FIXME: REMOVER TEMPLATE DO DESAFIO ANTERIOR A SEGUIR
+### Producer
+> Dependências: Provider
 
-> Nota: Cada desafio funciona **independentemente**, então você **não precisa** ter completado os desafios anteriores para fazer esse, mas é claro que os desafios anteriores podem servir como uma ajuda extra na realização desse, já que eles não só refletem módulos anteriores do curso, como também trazem abordagens extremamente parecidas com a que vocês verão nesse desafio, então fica aqui a dica com a colinha:
+O Producer será o nosso servidor Websocket principal da aplicação, e também será responsável por rodar a CLI onde é possível listar informações sobre as cryptos através do provider e enviar recomendações de cryptos aos Consumers conectados. 
 
-- Assim como no [#Challenge 01](https://github.com/training-erickwendel/jsexpert-exercicio01-pokeapi), nesse desafio vocês vão seguir o pattern de service/repository para consumir uma API e trazer valores úteis para usar na nossa aplicação em terminal.
+### Consumer
+> Dependências: Producer
 
-- E assim como no [#Challenge 02](https://github.com/training-erickwendel/jsexpert-challenge02-lifecycle), nesse desafio vocês terão testes automatizados já implementados para ajudar vocês em parte do desenvolvimento e da estrutura (Afinal toda ajuda é bem-vinda, né? 😉)
+O Consumer será o nosso cliente Websocket que receberá as cryptos recomendadas pelo Producer, e irá rodar a CLI responsável pela visualização gráfica de histórico das cryptos recomendadas, bem como a gestão da carteira do Consumer em execução - note que podemos ter vários consumers rodando simultaneamente com carteiras locais diferentes.
 
 ## Funcionalidades
 
-### Requisitos
+### Processo 01 (Lista de Crypto | Producer)
 
-1. Usando a Mock API fornecida no projeto (que você pode conferir tanto diretamente no arquivo `server.json` quanto executando `npm run server` no terminal e conferindo a saída em `localhost:3000/convert` no browser), escolha 3 das `moedas` retornadas para serem as suas moedas utilizadas no desafio (ex.: USD, EUR e RUB).
+- Iniciar o servidor WS principal
+- Listar as crypto moedas
+- iniciar o mainLoop da CLI
+  - Listar mais informações
+  - Selecionar uma das currencies exibidas
+    - quando selecionar, emitir evento para o _Processo 02_
 
-2. Implemente uma aplicação em linha de comando como a que vocês podem ver no vídeo abaixo, utilizando as `moedas` escolhidas para a realização do desafio:
+### Processo 02 (Wallet | Consumer)
 
-https://user-images.githubusercontent.com/41883467/147079954-2ae5853d-8f1b-44a6-844f-396634bf7a89.mov
+- Mostrar graficamente a crypto moeda selecionada atual
+- Ouvir o evento de seleção de moeda para dicionar a moeda na Wallet
+dicionar a moeda na Wallet
+- Selecionar uma das moedas na Wallet para ser a moeda representada no gr[áfico
+- Excluir uma das moedas na Wallet
 
-> Nota: Não esqueça que existem alguns testes unitários para te ajudar com o que deve ser feito.
+## Estruturas esperadas
+- Generators, Iterators e Async Iterators
+- Symbol
+- Map e Set
 
-3. Siga os `//@TODO: comments` espalhados pelo projeto para saber onde você deve mexer, e lembre-se que esse desafio envolverá muito mais criatividade que o anterior, então você terá que montar o quebra cabeça e ir descobrindo por onde começar a implementar cada função.
+### Requisitos do desafio
 
-> Dica Wells do dia: Abrace os "Mocks" antes de sair implementando chamadas à API e tudo mais. Entender o fluxo da aplicação e o que deve ser retornado antes de de fato implementar as funções facilita muito a vida, confia :D
+1. Suba o ambiente de desenvolvimento, executando os seguintes comandos em terminais diferentes: `npm run provider`, `npm run producer:dev`, `npm run consumer:dev`.
 
-4. Note que nesse desafio também existem testes te ajudando a ter um guia quanto às chamadas à API e ao fluxo principal (que é o fluxo mais mapeado do processo), mas a surpresa da implementação do terminal de fato fica por sua conta.
+2. Usando o código fornecido do desafio, analise e implemente as partes que precisam de implementação usando o conteúdo visto em aula. 
+> Nota: Os trechos que necessitam de modificação estão sinalizados com `//TODO: comments`. Veja a sessão de dicas abaixo para saber mais sobre.
 
-> Nota: Não são necessárias alterações nos testes existentes. Eles já estão prontos e servem de guia durante a execução do desafio
+3. Garanta que após a aplicação das estruturas, a aplicação execute conforme o vídeo abaixo:
+> Nota: Considere `npm start` como `npm run producer` e `npm run client` como `npm run consumer` :)
 
-### Testes
+https://user-images.githubusercontent.com/41883467/153467415-9c8091d2-97dc-4fcc-9edf-55b36bd098a3.mp4
 
-Seguindo o padrão que já usamos anteriormente, é esperado que com o desafio pronto, ao rodar `npm run test` todos os testes devem passar. O resultado deve ser algo parecido com isso:
+4. (Desafio opcional) Caso queira, valide se é possível a implementação com WeakSet e WeakMap, implemente e/ou deixe um comentário sobre no código.
 
-![image](https://user-images.githubusercontent.com/41883467/147080202-a47b8873-6e00-4d4e-b94b-a5e95933c50b.png)
+5. (Desafio opcional) Caso queira, tente aplicar alguns testes no desafio e entender o funcionamento de cada trecho mais a fundo.
+
+> Nota: Não se preocupe em alterar o código na CLI ou na implementação de websockets, já tivemos e/ou teremos desafios para vocês se aprofundarem nessa parte
+> Nota da nota: Caso queira, alterações em quaisquer partes do fluxo são bem vindas, desde que sejam usadas as estruturas mencionadas na sessão de _"Estruturas esperadas"_.
+
+### Dicas
+- Lembre-se que esse módulo apresenta estruturas complexas, então tente entender as responsabilidades de cada uma para saber onde aplicar, e não se esqueça de procurar exemplos de implementação no próprio código do desafio ou em desafios anteriores, caso necessário. Fica por sua conta e criatividade montar o quebra cabeça e ir descobrindo por onde começar a implementar cada função.
+> Dica Wells do dia: Pode sair Mockando e implementando as funções para ver a CLI funcionando antes de ir implementando as estruturas de cara. Entender o fluxo da aplicação e o que deve ser retornado antes de de fato implementar as funções facilita muito a vida, confia :D
+
+- Para melhorar sua experiência de desenvolvimento, você pode usar a extensão [TODO Highlight](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight) no VSCode, recebendo o auxilio visual para encontrar os `//TODO: comments`, assim:
+![image](https://user-images.githubusercontent.com/41883467/153465555-f2daa3e0-5770-4139-8344-dd2b792e159e.png)
 
 ### Extras
 
-- [ ] Desafio opcional: Note que não existem testes criados para o `terminal.js`. Então, caso queira, sinta-se livre para testar os métodos criados por você para a resolução desse desafio.
+- [ ] Desafio opcional: Caso queira, valide se é possível a implementação com WeakSet e WeakMap, implemente e/ou deixe um comentário sobre no código.
+- [ ] Desafio opcional: Caso queira, tente aplicar alguns testes no desafio e entender o funcionamento de cada trecho mais a fundo.
 
-> Dica: Para facilitar sua jornada nesses testes, lembre que não só Injeção de dependências é vida em termos de testes automatizados, mas as variáveis de referência também (como é o caso dos `this.print`, `this.data` e `this.terminal`), então centrar seus testes nessas variáveis pode ser uma boa idéia.
-
-## Dicas
-
-Sinta-se livre pra desenvolver sua solução da melhor maneira possível, e caso já queira uma dica sobre como organizar as idéias, aqui vai:
-
-- Dê uma olhada na `entity` já provida para ter uma idéia de qual será o tipo de dado esperado nesse processo (achamos uma boa idéia prover a estrutura base desde o início justamente por isso :D)
-- Confira também as moedas existentes na Mock API provida (conforme tutorial nos requisitos)
-- Lembre que cada `@TODO: comment` marca um trecho da aplicação onde você terá que mexer, e sinta-se livre para descobrir a melhor sequência para implementar cada método
-- Fique atento ao comportamento esperado dos métodos que possuem testes
-- Não esqueça de conferir as aulas do curso denovo para fixar mais ainda os conhecimentos e ver como o Erick implementa o terminal
 
 ### Arquitetura e onde trabalhar
 
@@ -75,63 +90,52 @@ project
 │
 └───src
 │   │  index.js
-│   │  terminal.js
-│   │  server.json
+│   │  consumer-cli.js
+│   │  producer-cli.js
+│   │  producer-server.js
+│   │  provider-server.json
 │   │
 │   └───config
 │   │   │   language.js
 │   │   │   terminal.js
 │   │
 │   └───entity
-│   │   │   Income.js
+│   │   │   Crypto.js
+│   │   │   User.js
+│   │   │   Users.js
 │   │
 │   └───repository
-│   │   │   IncomeRepository.js
+│   │   │   CryptoRepository.js
 │   │
 │   └───service
 │   │   │   IncomeService.js
-│
-└───test
 │   │
-│   └───mocks
-│   │   │   convert-response.js
-│   │   │   incomeRepository.mock.js
-│   │   │   valid-income.js
-│   │
-│   └───unit
-│   │   │   IncomeRepository.test.js
-│   │   │   IncomeService.test.js
+│   └───util
+│   │   │   Api.js
+│   │   │   CustomTerminal.js
 │
 ```
 
 ### Checklist features
 
-- [ ] Deve identificar o que está faltando no arquivo `config/terminal.js`
+- [ ] Deve implementar a estrutura esperada em `util/CustomTerminal.js`
 
-- [ ] Deve implementar a internacionalização no arquivo `entity/Income.js`
+- [ ] Deve implementar os métodos existentes em `service/CryptoService.js`
 
-- [ ] Deve implementar os métodos existentes em `repository/IncomeRepository`, assegurando que os testes em `IncomeRepository.test.js` estejam funcionando.
+- [ ] Deve implementar a estrutura esperada no arquivo `entity/User.js`
 
-- [ ] Deve implementar os métodos existentes em `service/IncomeService.js`, assegurando que os testes em `IncomeService.test.js` estejam funcionando.
-
-- [ ] Deve criar novos métodos e organizar a estrutura de criação do terminal em `terminal.js`
-
-- [ ] Deve entender e organizar o fluxo de chamada de funcões do terminal dentro do `mainLoop` em `index.js`
+- [ ] Deve implementar as estruturas esperadas no arquivo `entity/Users.js`
 
 ## Submissão
 
 1. Crie um fork deste repositório e modifique o README.md inserindo o seu nome no início do arquivo.
 
-2. Instale as dependências usando `npm i` e garanta que os testes rodam normalmente com `npm run dev`
+2. Instale as dependências usando `npm i`.
 
-> Nota: Como a idéia é que você implemente os códigos a fim de fazer os testes passarem e a saída ficar como no vídeo mencionado um pouco acima nesse README, a princípio todos os testes estarão quebrando, então não se assuste. :)
+3. Implemente cada uma das funções marcadas com um `//@TODO: comment`
 
-3. Implemente cada uma das funções marcadas com um `//@TODO: comment` (e não se esqueça de remover esses comentários uma vez que concluir a implementação)
-
-4. Garanta que todos os testes estejam rodando e, caso queira, conclua o desafio opcional mencionado acima.
-
-5. Envie o link no canal `#desafios-jsexpert` da nossa comunidade no discord.
+4. Envie o link no canal `#desafios-jsexpert` da nossa comunidade no discord.
 
 ## Até quando?
 
-Se você está pegando esse desafio na estréia, corre lá e envia pra gente até _Quarta-feira, 12 de janeiro de 2022 (12/01/2022)_!
+Se você está pegando esse desafio na estréia, corre lá e envia pra gente até _Quarta-feira, 09 de março de 2022 (09/03/2022)_!
